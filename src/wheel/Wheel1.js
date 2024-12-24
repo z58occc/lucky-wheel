@@ -1,12 +1,16 @@
 import hand from '../img/hand.svg';
 import outside from '../img/wheel-outside.svg';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 function Wheel1() {
+  const insideWheelRef = useRef(null);
   const bannerRef = useRef(null);
   const [myPrize, setMyPrize] = useState('');
+  const [prizeType, setPrizeType] = useState('');
   const [drawing, setDrawing] = useState(false);
   const [circleNum, setCircleNum] = useState(1);//轉幾圈
   const pointerRef = useRef(null);
+  const prizeNamesRef = useRef([]);
+
   const prizes = [// 用JSON存獎品資料
     {
       "id": 1,
@@ -59,8 +63,23 @@ function Wheel1() {
       const color = i % 2 === 0 ? '#343BAA' : '#F0BEFF'
       return `${color} ${startAngle}deg ${endAngle}deg`
     })
-    .join(', ');
+  const orginColor = Array.from({ length: prizes.length })
+    .map((_, i) => {
+      const color = i % 2 !== 0 ? '#343BAA' : '#F0BEFF'
+      return `${color}`
+    })
+  const [circleColor, setCircleColor] = useState(gradient);
+  const [choosenColor, setChoosenColor] = useState(orginColor);
+
+
+
+
   const drawIt = () => {
+    setCircleColor(gradient);
+    setChoosenColor(orginColor);
+
+
+
     if (totalNum === 0) {
       alert('你已經抽完了');
       return;
@@ -69,6 +88,17 @@ function Wheel1() {
     setDrawing(true);// disable 抽獎按鈕
     const index = Math.floor(Math.random() * totalNum);// 0~獎品數 隨機產生一個數字
     setMyPrize(allPrize[index]);// 抽中的獎品
+    const choosen = prizes.find((prize) => prize.name === allPrize[index]);
+    const colorArr = [...gradient];
+    const wordColorArr=[...orginColor];
+    wordColorArr[choosen.id - 1]='white';
+    colorArr[choosen.id - 1] = `#FF00BA ${360 / prizes.length * (choosen.id - 1)}deg  ${360 / prizes.length * (choosen.id)}deg`
+
+    setPrizeType(choosen.icon);
+
+
+
+
     const newArr = allPrize.filter((_, i) => i !== index)// 把被抽中的 踢出陣列
     setAllPrize(newArr);
     setTotalNum(totalNum - 1);// 獎品數減一
@@ -82,9 +112,15 @@ function Wheel1() {
     setCircleNum(circleNum + 3); // 加的數字越大 轉越多圈
     setTimeout(() => {// 等4秒（指針轉完） 恢復按鈕
       bannerRef.current.style.display = 'flex';
+      setCircleColor(colorArr)
+      setChoosenColor(wordColorArr);
       setDrawing(false);
     }, 4000);
   }
+  useEffect(() => {
+    console.log(orginColor);
+
+  })
 
   return (
     <div className="App">
@@ -94,7 +130,7 @@ function Wheel1() {
       <div className='vh-100 d-flex align-items-center justify-content-center'
         style={{
           backgroundColor: '#5858B9',
-          position: 'relative'
+          position: 'relative',
         }}
       >
         <div className="banner  justify-content-between"
@@ -104,9 +140,91 @@ function Wheel1() {
             width: '100%',
             height: '237px',
             backgroundColor: '#343BAA',
+            overflow: "hidden"
           }}
           ref={bannerRef}
         >
+          <i className={prizeType}
+            style={{
+              position: 'absolute',
+              top: '36px',
+              left: '32px',
+              fontSize: '45px',
+              color: '#22299B'
+            }}
+          />
+          <i className={prizeType}
+            style={{
+              position: 'absolute',
+              top: '129px',
+              left: '-30px',
+              fontSize: '45px',
+              color: '#22299B'
+            }}
+          />
+          <i className={prizeType}
+            style={{
+              position: 'absolute',
+              top: '200px',
+              left: '118px',
+              fontSize: '45px',
+              color: '#22299B',
+            }}
+          />
+          <i className={prizeType}
+            style={{
+              position: 'absolute',
+              top: '-30px',
+              left: '295px',
+              fontSize: '45px',
+              color: '#22299B',
+            }}
+          />
+          <i className={prizeType}
+            style={{
+              position: 'absolute',
+              top: '150px',
+              left: '430px',
+              fontSize: '45px',
+              color: '#22299B',
+            }}
+          />
+          <i className={prizeType}
+            style={{
+              position: 'absolute',
+              top: '-30px',
+              right: '295px',
+              fontSize: '45px',
+              color: '#22299B',
+            }}
+          />
+          <i className={prizeType}
+            style={{
+              position: 'absolute',
+              top: '200px',
+              right: '243px',
+              fontSize: '45px',
+              color: '#22299B',
+            }}
+          />
+          <i className={prizeType}
+            style={{
+              position: 'absolute',
+              top: '128px',
+              right: '10px',
+              fontSize: '45px',
+              color: '#22299B',
+            }}
+          />
+          <i className={prizeType}
+            style={{
+              position: 'absolute',
+              top: '15px',
+              right: '-30px',
+              fontSize: '45px',
+              color: '#22299B',
+            }}
+          />
 
           <div className="text-left">
             WELL DONE!
@@ -132,9 +250,10 @@ function Wheel1() {
               width: '500px',
               borderRadius: '100%',
               position: 'relative',
-              backgroundImage: `conic-gradient(${gradient})`,
+              backgroundImage: `conic-gradient(${circleColor})`,
               transform: `rotate(30deg)`
             }}
+            ref={insideWheelRef}
           >
             <img src={outside} alt=""
               style={{
@@ -152,7 +271,11 @@ function Wheel1() {
                     rotate(${(360 / prizes.length) * i - 90 + (360 / prizes.length / 2)}deg)
                     translate(200px) 
                     rotate(90deg)`,
-                    color: i % 2 !== 0 ? '#343BAA' : '#F0BEFF'
+                    color: choosenColor[i]
+                  }}
+                  ref={(el) => {
+                    prizeNamesRef.current[i] = el;
+                    return prizeNamesRef.current[i]
                   }}
                 >
                   <i className={`${prize.icon} ms-auto me-auto`}
@@ -162,6 +285,7 @@ function Wheel1() {
                     }}
                   />
                   <div className='prize-name d-flex align-items-center justify-content-center'
+
                   >
                     {prize.name}
                   </div>
