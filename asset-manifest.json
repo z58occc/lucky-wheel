@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/lucky-wheel/static/css/main.40cfabb2.css",
-    "main.js": "/lucky-wheel/static/js/main.dfb57602.js",
+    "main.js": "/lucky-wheel/static/js/main.bd619ba0.js",
     "static/js/488.de0df535.chunk.js": "/lucky-wheel/static/js/488.de0df535.chunk.js",
     "static/media/bootstrap-icons.woff?": "/lucky-wheel/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",
     "static/media/bootstrap-icons.woff2?": "/lucky-wheel/static/media/bootstrap-icons.b7bcc075b395c14ce8c2.woff2",
@@ -9,11 +9,11 @@
     "static/media/hand.svg": "/lucky-wheel/static/media/hand.9003a663988304afc70542b29d4beb16.svg",
     "index.html": "/lucky-wheel/index.html",
     "main.40cfabb2.css.map": "/lucky-wheel/static/css/main.40cfabb2.css.map",
-    "main.dfb57602.js.map": "/lucky-wheel/static/js/main.dfb57602.js.map",
+    "main.bd619ba0.js.map": "/lucky-wheel/static/js/main.bd619ba0.js.map",
     "488.de0df535.chunk.js.map": "/lucky-wheel/static/js/488.de0df535.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.40cfabb2.css",
-    "static/js/main.dfb57602.js"
+    "static/js/main.bd619ba0.js"
   ]
 }
