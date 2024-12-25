@@ -123,8 +123,18 @@ function Wheel2() {
       const color = i % 2 === 0 ? '#343BAA' : '#F0BEFF'
       return `${color} ${startAngle}deg ${endAngle}deg`
     })
-    .join(', ');
+  const [circleColor, setCircleColor] = useState(gradient);// 初始顏色用gradient
+  const orginColor = Array.from({ length: prizes.length })
+    .map((_, i) => {
+      const color = i % 2 !== 0 ? '#343BAA' : '#F0BEFF'
+      return `${color}`
+    })
+  const [choosenColor, setChoosenColor] = useState(orginColor);
+
+
   const drawIt = () => {
+    setCircleColor(gradient);
+    setChoosenColor(orginColor);
     if (totalNum === 0) {
       alert('你已經抽完了');
       return;
@@ -134,12 +144,25 @@ function Wheel2() {
     const index = Math.floor(Math.random() * totalNum);// 0~獎品數 隨機產生一個數字
     setMyPrize(allPrize[index]);// 抽中的獎品
     const newArr = allPrize.filter((_, i) => i !== index)// 把被抽中的 踢出陣列
+    const choosen = prizes.find((prize) => prize.name === allPrize[index]);
+    console.log(gradient);
+    
+    const colorArr = [...gradient];//淺拷貝
+
+    const wordColorArr = [...orginColor];
+    wordColorArr[choosen.id - 1] = 'white';
+    //指到的字變白色
+    colorArr[choosen.id - 1] = `#FF00BA ${360 / prizes.length * (choosen.id - 1)}deg  ${360 / prizes.length * (choosen.id)}deg`
+    //指到的部分幾度到幾度變粉紅
+
+
+
     setAllPrize(newArr);
     setTotalNum(totalNum - 1);// 獎品數減一
     const rotateDeg = prizes.filter(prize => prize.name === allPrize[index])[0].id// 抽到哪個要轉幾度
     pointerRef.current.style.transition = "transform 4s ease "; // 旋轉4秒內完成
-    pointerRef.current.style.transform = `rotate(${((360 / prizes.length) * rotateDeg+(360 / prizes.length) * (rotateDeg-1))/2
-       + 360 * circleNum}deg)` // 總共轉幾度 
+    pointerRef.current.style.transform = `rotate(${((360 / prizes.length) * rotateDeg + (360 / prizes.length) * (rotateDeg - 1)) / 2
+      + 360 * circleNum}deg)` // 總共轉幾度 
     // 360 * circleNum 為了讓指針保持順時針轉動 將他的度數不斷往上加
     // 所以他抽到哪個就轉幾度 再加上360的倍數
     // 第一次轉 360+獎品度數 第二次轉720+獎品度數
@@ -148,6 +171,8 @@ function Wheel2() {
     setTimeout(() => {// 等4秒（指針轉完） 恢復按鈕
       bannerRef.current.style.display = 'flex';
       setDrawing(false);
+      setCircleColor(colorArr)
+      setChoosenColor(wordColorArr);
     }, 4000);
   }
 
@@ -197,7 +222,7 @@ function Wheel2() {
               width: '500px',
               borderRadius: '100%',
               position: 'relative',
-              backgroundImage: `conic-gradient(${gradient})`,
+              backgroundImage: `conic-gradient(${circleColor})`,
               transform: `rotate(-${360 / prizes.length / 2}deg)`
               // 沒有rotate會以圓的0度為正上方 20跟1的交界
               // rotate後正上方變為1的中間
@@ -221,7 +246,7 @@ function Wheel2() {
                     rotate(${(360 / prizes.length) * i - 90 + (360 / prizes.length / 2)}deg)
                     translate(200px) 
                     rotate(90deg)`,
-                    color: i % 2 !== 0 ? '#343BAA' : '#F0BEFF'
+                    color: choosenColor[i]
                   }}
                 >
                   <i className={`${prize.icon} ms-auto me-auto`}

@@ -68,7 +68,7 @@ function Wheel1() {
       const color = i % 2 !== 0 ? '#343BAA' : '#F0BEFF'
       return `${color}`
     })
-  const [circleColor, setCircleColor] = useState(gradient);
+  const [circleColor, setCircleColor] = useState(gradient);// 初始顏色用gradient
   const [choosenColor, setChoosenColor] = useState(orginColor);
 
 
@@ -89,11 +89,12 @@ function Wheel1() {
     const index = Math.floor(Math.random() * totalNum);// 0~獎品數 隨機產生一個數字
     setMyPrize(allPrize[index]);// 抽中的獎品
     const choosen = prizes.find((prize) => prize.name === allPrize[index]);
-    const colorArr = [...gradient];
+    const colorArr = [...gradient];//淺拷貝
     const wordColorArr=[...orginColor];
     wordColorArr[choosen.id - 1]='white';
+    //指到的字變白色
     colorArr[choosen.id - 1] = `#FF00BA ${360 / prizes.length * (choosen.id - 1)}deg  ${360 / prizes.length * (choosen.id)}deg`
-
+    //指到的部分幾度到幾度變粉紅
     setPrizeType(choosen.icon);
 
 
@@ -117,10 +118,6 @@ function Wheel1() {
       setDrawing(false);
     }, 4000);
   }
-  useEffect(() => {
-    console.log(orginColor);
-
-  })
 
   return (
     <div className="App">
