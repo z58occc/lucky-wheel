@@ -1,6 +1,6 @@
 import hand from '../img/hand.svg';
 import outside from '../img/wheel-outside.svg';
-import { useEffect, useRef, useState } from 'react';
+import {  useRef, useState } from 'react';
 function Wheel1() {
   const insideWheelRef = useRef(null);
   const bannerRef = useRef(null);
